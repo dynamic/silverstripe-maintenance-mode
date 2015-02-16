@@ -1,0 +1,3 @@
+<?php
+define('MAINTENANCE_MODE_DIR', basename(__DIR__));
+define('MAINTENANCE_MODE_PATH', BASE_PATH . '/' . MAINTENANCE_MODE_DIR);

@@ -1,0 +1,11 @@
+_ss_environment.php
+tools/phing-metadata
+silverstripe-cache/
+_resampled/
+.buildpath
+.project
+.settings
+.idea
+.DS_Store
+.Thumbs.db
+vendor/

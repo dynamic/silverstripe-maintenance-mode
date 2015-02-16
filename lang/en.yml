@@ -1,0 +1,10 @@
+en:
+  MaintenanceMode:
+    SETTINGSHEADING: 'Offline/Maintenance Mode'
+    SETTINGSACTIVATE: 'Activate Offline/Maintenance Mode'
+    TITLE: 'Undergoing Scheduled Maintenance'
+    URLSEGMENT: 'offline'
+    MENUTITLE: 'Utility Page'
+    CONTENT: '<h1>We will be back soon!</h1><p>Sorry for the inconvenience but our site is currently down for scheduled maintenance.</p>'
+    RENDERINGTEMPLATE: 'Template to render with'
+    DEFAULTTEMPLATE: '(Use default template)'

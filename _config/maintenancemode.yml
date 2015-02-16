@@ -1,0 +1,17 @@
+---
+Name: maintenancemode
+After:
+- 'framework/*'
+- 'cms/*'
+---
+# YAML configuration for SilverStripe
+# See http://doc.silverstripe.org/framework/en/topics/configuration
+# Caution: Indentation through two spaces, not tabs
+
+SiteConfig:
+  extensions:
+    - MaintenanceMode_SiteConfigExtension
+
+Page_Controller:
+  extensions:
+    - MaintenanceMode_Page_ControllerExtension

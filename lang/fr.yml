@@ -1,0 +1,10 @@
+fr:
+  MaintenanceMode:
+    SETTINGSHEADING: 'Mode maintenance / Hors ligne'
+    SETTINGSACTIVATE: 'Activer le mode Maintenance / Hors ligne'
+    TITLE: 'Site en cours de maintenance'
+    URLSEGMENT: 'hors-ligne'
+    MENUTITLE: 'Page Utilitaire'
+    CONTENT: '<h1>Nous serons bientôt de retour !</h1><p>Désolé pour le désagrément, mais notre site est actuellement en cours de maintenance.</p>'
+    RENDERINGTEMPLATE: 'Modèle à utiliser'
+    DEFAULTTEMPLATE: '(Utiliser le modèle par défaut)'

@@ -1,0 +1,10 @@
+sv:
+  MaintenanceMode:
+    SETTINGSHEADING: 'Offline / underhållsläge'
+    SETTINGSACTIVATE: 'Aktivera Offline / underhållsläge'
+    TITLE: 'Genomgår schemalagt underhåll'
+    URLSEGMENT: 'offline'
+    MENUTITLE: 'Funktionssida'
+    CONTENT: '<h1>Vi återkommer snart!</h1><p>Vi ber om ursäkt, vår webbplats ligger just nu nere på grund av schemalagt underhåll.</p>'
+    RENDERINGTEMPLATE: 'Välj mall'
+    DEFAULTTEMPLATE: '(Använd standard mall)'
