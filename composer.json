@@ -1,8 +1,8 @@
 {
-    "name": "dljoseph/silverstripe-maintenance-mode",
+    "name": "thisisbd/silverstripe-maintenance-mode",
     "description": "SilverStripe Maintenance Mode Module.  Allows an administrator to put site in offline mode with 503 status to display a 'Coming Soon', 'Under Construction' or 'Down for Maintenance' Page to regular visitors, whilst allowing a logged in admin user to browse and make changes to the site.",
     "type": "silverstripe-module",
-    "homepage": "http://github.com/dljoseph/silverstripe-maintenance-mode",
+    "homepage": "http://github.com/thisisbd/silverstripe-maintenance-mode",
     "keywords": [
         "silverstripe","maintenance mode","under construction","coming soon",
         "offline mode","utility page","offline","construction","unavailable",
@@ -13,7 +13,7 @@
         {"name": "Darren-Lee Joseph","email": "darrenleejoseph@gmail.com"}
     ],
     "support": {
-        "issues": "http://github.com/dljoseph/silverstripe-maintenance-mode/issues"
+        "issues": "http://github.com/thisisbd/silverstripe-maintenance-mode/issues"
     },
     "require": {
         "silverstripe/cms": "~3.1",
