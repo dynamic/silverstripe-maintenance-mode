@@ -5,8 +5,7 @@
     "homepage": "http://github.com/thisisbd/silverstripe-maintenance-mode",
     "keywords": [
         "silverstripe","maintenance mode","under construction","coming soon",
-        "offline mode","utility page","offline","construction","unavailable",
-        "site is down", "mode", "launch"
+        "offline page","utility page","landing page"
     ],
     "license": "BSD-3-Clause",
     "authors": [
