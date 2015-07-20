@@ -47,7 +47,7 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 
         // Process the request internally to ensure the URL is maintained (instead of redirecting to our maintenance page's URL).
         $controller = ModelAsController::controller_for($utilityPage);
-        $response = $controller->handleRequest(new SS_HTTPRequest("GET", "/"));
+        $response = $controller->handleRequest(new SS_HTTPRequest($this->owner->request, $this->owner->model));
         throw new SS_HTTPResponse_Exception($response, $response->getStatusCode());
     }
 
