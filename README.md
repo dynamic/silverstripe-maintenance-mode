@@ -55,6 +55,18 @@ to flush the template cache.  Afterwards, you must go to the UtilityPage in the
 CMS and select the manually select the template from the dropdown to tell
 SilverStripe which template to use to render the page for display.
 
+### Redirecting vs. Displaying at any URL
+
+By default, the current functionality is to redirect users to a separate URL which you can configure within the CMS (e.g. `/offline/`), however it may be useful for you to simply display the maintenance message at any URL that the user may visit (to ensure user does not lose the page that they're currently at, in case maintenance window is very short). 
+
+To disable redirects, drop the following lines into your site's `config.yaml` file:
+
+```yaml
+UtilityPage:
+  DisableRedirect: true
+```
+
+
 
 Known Issues
 ------------
