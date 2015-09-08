@@ -14,13 +14,17 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
     // Set to true after the first execution as an extra measure to prevent infinite recursion, just in case.
     protected static $runOnce = false;
 
+    // Allowed IP addresses
+    private static $allowed_ips = array();
+
     /**
      * @throws SS_HTTPResponse_Exception
      * @return SS_HTTPResponse
      */
     public function onBeforeInit() {
 
-        if(Permission::check("ADMIN")) return;
+        // Check if the visitor is Admin OR if they have an allowed IP.
+        if(Permission::check("ADMIN") || $this->hasAllowedIP()) return;
 
         $config = SiteConfig::current_site_config();
         if(!$config->MaintenanceMode) return;
@@ -49,6 +53,40 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
         $controller = ModelAsController::controller_for($utilityPage);
         $response = $controller->handleRequest(new SS_HTTPRequest("GET", "/"), new DataModel());
         throw new SS_HTTPResponse_Exception($response, $response->getStatusCode());
+    }
+
+    /**
+     * Check if the visitors IP is in the array of allowed IP's
+     * @return Boolean
+     */
+    public function hasAllowedIP() {
+        if (in_array($this->getClientIP(), $this->owner->config()->allowed_ips)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the visitors IP based on the following
+     * @return String/NULL
+     */
+    public function getClientIP() {
+        if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_X_FORWARDED'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED_FOR'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED_FOR'];
+        } elseif (isset($_SERVER['HTTP_FORWARDED'])) {
+            $ipaddress = $_SERVER['HTTP_FORWARDED'];
+        } elseif (isset($_SERVER['REMOTE_ADDR'])) {
+            $ipaddress = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $ipaddress = "Unknown";
+        }
+        return $ipaddress;
     }
 
 }//end class MaintenanceMode_Page_ControllerExtension
