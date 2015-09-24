@@ -68,7 +68,7 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 
     /**
      * Get the visitors IP based on the following
-     * @return String/NULL
+     * @return string/NULL
      */
     public function getClientIP() {
         if (isset($_SERVER['HTTP_CLIENT_IP'])) {
