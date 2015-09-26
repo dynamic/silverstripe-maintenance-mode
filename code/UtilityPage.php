@@ -69,7 +69,7 @@ class UtilityPage extends ErrorPage {
     }
 
 
-    public function getCMSFields(){
+    public function getCMSFields() {
         $fields = parent::getCMSFields();
 
         $fields->addFieldToTab('Root.Main',
@@ -94,7 +94,7 @@ class UtilityPage extends ErrorPage {
      * This function returns an array of top-level theme templates
      * @return array
      */
-    public static function get_top_level_templates(){
+    public static function get_top_level_templates() {
 
         $ss_templates_array = array(); //initialise empty array
         $current_theme_path = THEMES_PATH . '/' . Config::inst()->get('SSViewer', 'theme');
@@ -140,7 +140,7 @@ class UtilityPage_Controller extends Page_Controller {
 
     private static $allowed_actions = array();
 
-    public function init(){
+    public function init() {
         parent::init();
 
         $config = $this->SiteConfig();
@@ -151,7 +151,7 @@ class UtilityPage_Controller extends Page_Controller {
 
         };
 
-        if($this->dataRecord->RenderingTemplate){
+        if($this->dataRecord->RenderingTemplate) {
             $this->templates['index'] = array($this->dataRecord->RenderingTemplate, 'Page');
         }
         $this->response->setStatusCode($this->ErrorCode);
