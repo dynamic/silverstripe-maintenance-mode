@@ -11,10 +11,18 @@
  */
 class MaintenanceMode_Page_ControllerExtension extends Extension {
 
-	// Set to true after the first execution as an extra measure to prevent infinite recursion, just in case.
+	/**
+	 * Set to true after the first execution as an extra measure to prevent infinite recursion, just in case.
+	 *
+	 * @var boolean
+	 */
 	protected static $runOnce = false;
 
-	// Allowed IP addresses
+	/**
+	 * Allowed IP addresses
+	 *
+	 * @var array
+	 */
 	private static $allowed_ips = array();
 
 	/**
@@ -45,11 +53,13 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 		// No need to execute more than once.
 		if ($this->owner instanceof UtilityPage_Controller) return;
 
-		// Additional failsafe, just in case (for some reason) the current controller isn't descended from UtilityPage_Controller.
+		// Additional failsafe, just in case (for some reason) the current controller
+		// isn't descended from UtilityPage_Controller.
 		if (static::$runOnce) return;
 		static::$runOnce = true;
 
-		// Process the request internally to ensure the URL is maintained (instead of redirecting to our maintenance page's URL).
+		// Process the request internally to ensure the URL is maintained
+		// (instead of redirecting to our maintenance page's URL).
 		$controller = ModelAsController::controller_for($utilityPage);
 		$response = $controller->handleRequest(new SS_HTTPRequest("GET", "/"), new DataModel());
 		throw new SS_HTTPResponse_Exception($response, $response->getStatusCode());
@@ -57,18 +67,17 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 
 	/**
 	 * Check if the visitors IP is in the array of allowed IP's
-	 * @return Boolean
+	 *
+	 * @return boolean
 	 */
 	public function hasAllowedIP() {
-		if (in_array($this->getClientIP(), $this->owner->config()->allowed_ips)) {
-			return true;
-		}
-		return false;
+		return in_array($this->getClientIP(), $this->owner->config()->allowed_ips);
 	}
 
 	/**
 	 * Get the visitors IP based on the following
-	 * @return string/NULL
+	 *
+	 * @return string
 	 */
 	public function getClientIP() {
 		if (isset($_SERVER['HTTP_CLIENT_IP'])) {
@@ -84,13 +93,12 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 		} elseif (isset($_SERVER['REMOTE_ADDR'])) {
 			$ipaddress = $_SERVER['REMOTE_ADDR'];
 		} else {
-			$ipaddress = "Unknown";
+			$ipaddress = 'Unknown';
 		}
 		return $ipaddress;
 	}
 
 }//end class MaintenanceMode_Page_ControllerExtension
-
 
 
 /**
@@ -101,27 +109,33 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
  */
 class MaintenanceMode_SiteConfigExtension extends DataExtension {
 
-	// Add database field for flag to either display or hide under construction pages.
-	static $db = array(
+	/**
+	 * Add database field for flag to either display or hide under construction pages.
+	 *
+	 * @var array
+	 */
+	private static $db = array(
 		'MaintenanceMode' => 'Boolean'
 	);
 
+	/**
+	 * @param  FieldList $fields
+	 */
 	public function updateCMSFields(FieldList $fields) {
 
 		//create new tabs in SiteConfig
 		$fields->addFieldToTab("Root.Access",
 			FieldGroup::create(
-				HeaderField::create('MaintenanceModeHeading',
+				HeaderField::create(
+					'MaintenanceModeHeading',
 					_t('MaintenanceMode.SETTINGSHEADING', 'Offline/Maintenance Mode'),
-					$headingLevel = 3),
-
+					$headingLevel = 3
+				),
 				CheckboxField::create(
 					'MaintenanceMode',
 					'&nbsp; ' . _t('MaintenanceMode.SETTINGSACTIVATE', 'Activate Offline/Maintenance Mode')
 				)
 			)
 		);
-
 	}//end updateCMSFields
-
 }//end class MaintenanceMode_SiteConfigExtension

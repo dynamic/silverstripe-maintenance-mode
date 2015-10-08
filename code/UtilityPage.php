@@ -26,10 +26,13 @@ class UtilityPage extends ErrorPage {
 		'ErrorCode' => '503'
 	);
 
-
+	/**
+	 * @param Member $member
+	 * @return boolean
+	 */
 	public function canCreate($member = null) {
 		// Only allow one of this Page type to be created in the CMS.
-		return !DataObject::get_one($this->ClassName);
+		return !UtilityPage::get()->exists();
 	}
 
 
@@ -64,7 +67,7 @@ class UtilityPage extends ErrorPage {
 			$page->write();
 			$page->publish('Stage', 'Live');
 
-			DB::alteration_message('Utility Page created','created');
+			DB::alteration_message('Utility Page created', 'created');
 		}
 	}
 
@@ -84,11 +87,9 @@ class UtilityPage extends ErrorPage {
 
 		$templateDropdownField->setEmptyString(_t('MaintenanceMode.DEFAULTTEMPLATE', '(Use default template)'));
 
-
 		$this->extend('updateCMSFields', $fields);
 		return $fields;
 	}
-
 
 	/**
 	 * This function returns an array of top-level theme templates
@@ -123,8 +124,6 @@ class UtilityPage extends ErrorPage {
 		return $ss_templates_array;
 
 	}//end get_top_level_templates()
-
-
 }
 
 
@@ -148,14 +147,12 @@ class UtilityPage_Controller extends Page_Controller {
 		//regular non-admin users should only be able to see this utility page in maintenance mode
 		if(!$config->MaintenanceMode && !Permission::check("ADMIN")) {
 			return $this->redirect(BASE_URL); //redirect to home page
-
-		};
+		}
 
 		if($this->dataRecord->RenderingTemplate) {
 			$this->templates['index'] = array($this->dataRecord->RenderingTemplate, 'Page');
 		}
+
 		$this->response->setStatusCode($this->ErrorCode);
-
 	}
-
 }
