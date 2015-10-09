@@ -66,6 +66,19 @@ UtilityPage:
   DisableRedirect: true
 ```
 
+### Command Line
+
+You can toggle maintenance mode either `on` or `off` via the command line easily by simply running the `MaintenanceMode` task. For example:
+
+```bash
+# Via Sake:
+sake dev/tasks/MaintenanceMode on
+
+# Via the CLI script directly:
+php framework/cli-script.php dev/tasks/MaintenanceMode on
+```
+
+
 ### Allowing specific IP addresses
 You can configure the module to also allow specific IP addresses pass the maintenance page.
 To add IP's add the following lines into your site's `config.yaml` file:
