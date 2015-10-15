@@ -12,13 +12,6 @@
 class MaintenanceMode_Page_ControllerExtension extends Extension {
 
 	/**
-	 * Set to true after the first execution as an extra measure to prevent infinite recursion, just in case.
-	 *
-	 * @var boolean
-	 */
-	protected static $runOnce = false;
-
-	/**
 	 * Allowed IP addresses
 	 *
 	 * @var array
@@ -30,44 +23,50 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 	 */
 	public function onBeforeInit() {
 
+		$config = SiteConfig::current_site_config();
+
+		// If Maintenance Mode is Off, skip processing
+		if(!$config->MaintenanceMode) return;
+
+
 		// Check if the visitor is Admin OR if they have an allowed IP.
 		if(Permission::check("ADMIN") || $this->hasAllowedIP()) return;
 
-		$config = SiteConfig::current_site_config();
-		if(!$config->MaintenanceMode) return;
+
+		// Are we already on the UtilityPage? If so, skip processing.
+		if ($this->owner instanceof UtilityPage_Controller) return;
+
 
 		// Fetch our utility page instance now.
 		/** @var Page $utilityPage */
 		$utilityPage = UtilityPage::get()->first();
 		if (!$utilityPage) return; // We need a utility page before we can do anything.
 
-		// See if we're still configured to redirect...
-		if (!$utilityPage->config()->DisableRedirect) {
-			//If this is not the utility page, do a temporary (302) redirect to it
-			if($this->owner->dataRecord->ClassName != "UtilityPage") {
-				$response = new SS_HTTPResponse();
-				$response->redirect($utilityPage->AbsoluteLink(), 302);
-				HTTP::add_cache_headers($response);
-				$response->output();
-				die();
-			}
-		}
 
-		// No need to execute more than once.
-		if ($this->owner instanceof UtilityPage_Controller) return;
+		// Are we configured to prevent redirection to the UtilityPage URL?
+		if ($utilityPage->config()->DisableRedirect) {
 
-		// Additional failsafe, just in case (for some reason) the current controller
-		// isn't descended from UtilityPage_Controller.
-		if (static::$runOnce) return;
-		static::$runOnce = true;
+			// Process the request internally to ensure that the URL is maintained 
+			// (instead of redirecting to the maintenance page's URL) and skip any further processing.
 
-		// Process the request internally to ensure the URL is maintained
-		// (instead of redirecting to our maintenance page's URL).
-		$controller = ModelAsController::controller_for($utilityPage);
-		$response = $controller->handleRequest(new SS_HTTPRequest("GET", "/"), new DataModel());
-		HTTP::add_cache_headers($response);
-		$response->output();
-		die();
+			$controller = ModelAsController::controller_for($utilityPage);
+			$response = $controller->handleRequest(new SS_HTTPRequest('GET', ''), DataModel::inst());
+
+			HTTP::add_cache_headers($response);
+			$response->output();
+
+			die();
+        }
+
+
+        // Default: Skip any further processing and immediately respond with a redirect to the UtilityPage.
+        $response = new SS_HTTPResponse();
+        $response->redirect($utilityPage->AbsoluteLink(), 302);
+
+        HTTP::add_cache_headers($response);
+        $response->output();
+
+        die();
 	}
 
 	/**
