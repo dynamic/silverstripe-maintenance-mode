@@ -46,7 +46,11 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 		if (!$utilityPage->config()->DisableRedirect) {
 			//If this is not the utility page, do a temporary (302) redirect to it
 			if($this->owner->dataRecord->ClassName != "UtilityPage") {
-				return $this->owner->redirect($utilityPage->AbsoluteLink(), 302);
+				$response = new SS_HTTPResponse();
+				$response->redirect($utilityPage->AbsoluteLink(), 302);
+				HTTP::add_cache_headers($response);
+				$response->output();
+				die();
 			}
 		}
 
