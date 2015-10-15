@@ -26,7 +26,6 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 	private static $allowed_ips = array();
 
 	/**
-	 * @throws SS_HTTPResponse_Exception
 	 * @return SS_HTTPResponse
 	 */
 	public function onBeforeInit() {
@@ -66,7 +65,9 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 		// (instead of redirecting to our maintenance page's URL).
 		$controller = ModelAsController::controller_for($utilityPage);
 		$response = $controller->handleRequest(new SS_HTTPRequest("GET", "/"), new DataModel());
-		throw new SS_HTTPResponse_Exception($response, $response->getStatusCode());
+		HTTP::add_cache_headers($response);
+		$response->output();
+		die();
 	}
 
 	/**
