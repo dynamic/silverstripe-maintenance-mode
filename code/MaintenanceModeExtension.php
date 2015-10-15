@@ -56,17 +56,17 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 			$response->output();
 
 			die();
-        }
+		}
 
 
-        // Default: Skip any further processing and immediately respond with a redirect to the UtilityPage.
-        $response = new SS_HTTPResponse();
-        $response->redirect($utilityPage->AbsoluteLink(), 302);
+		// Default: Skip any further processing and immediately respond with a redirect to the UtilityPage.
+		$response = new SS_HTTPResponse();
+		$response->redirect($utilityPage->AbsoluteLink(), 302);
 
-        HTTP::add_cache_headers($response);
-        $response->output();
+		HTTP::add_cache_headers($response);
+		$response->output();
 
-        die();
+		die();
 	}
 
 	/**
