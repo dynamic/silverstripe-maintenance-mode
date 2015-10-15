@@ -9,7 +9,9 @@
     ],
     "license": "BSD-3-Clause",
     "authors": [
-        {"name": "Darren-Lee Joseph","email": "darrenleejoseph@gmail.com"}
+        {"name": "Darren-Lee Joseph","email": "darrenleejoseph@gmail.com"},
+        {"name": "Patrick Nelson","email": "pat@catchyour.com"},
+        {"name": "Myles Beardsmore","email": "mediabeastnz@gmail.com"}
     ],
     "support": {
         "issues": "http://github.com/thisisbd/silverstripe-maintenance-mode/issues"

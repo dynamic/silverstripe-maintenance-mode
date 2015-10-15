@@ -1,0 +1,24 @@
+People who have contributed to this SilverStripe Maintenance Mode module:
+
+Primary Author:
+Darren-Lee Joseph <darrenleejoseph@gmail.com>
+
+Patrick Nelson <pat@catchyour.com>
+ * Incorporating the ability to disable the redirect and instead render the maintenance mode (UtilityPage) immediately at any URL.
+ * Added task to enable/disable maintenance mode via 'sake dev/tasks/MaintenanceMode [on|off]'
+ * Documentation
+
+Myles Beardsmore <mediabeastnz@gmail.com>
+ * Added the ability to allow specific IP addreses bypass the maintenance page
+ * Documentation
+
+Peter Thaleikis
+ * DocBlock Code formatting / cleanup
+ * Bug reporting
+
+Translation
+Despina Tapaki
+Lisa Frykman
+Thomas Wahl
+
+Special thanks to Frank Mullenger <frankmullenger@gmail.com> - his previous work on the Holding Page Module and Under Construction Module paved the way for this SilverStripe Maintenance Mode module.
