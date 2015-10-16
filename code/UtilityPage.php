@@ -48,26 +48,61 @@ class UtilityPage extends ErrorPage {
 		// Skip creation of default records
 		if(!self::config()->create_default_pages) return;
 
+		// Ensure that an assets path exists before we do any error page creation
+		if(!file_exists(ASSETS_PATH)) {
+			mkdir(ASSETS_PATH);
+		}
+
+		$code = self::$defaults['ErrorCode'];
+		$pagePath = self::get_filepath_for_errorcode($code);
+		$page = UtilityPage::get()->first();
+		$pageExists = ($page && $page->exists());
+
 		//Only create a UtilityPage on dev/build if one does not already exist.
-		if(!UtilityPage::get()->exists()) {
+		if(!$pageExists or !file_exists($pagePath)) {
 
-			$page = UtilityPage::create(array(
-				'Title' => _t('MaintenanceMode.TITLE', 'Undergoing Scheduled Maintenance'),
-				'URLSegment' => _t('MaintenanceMode.URLSEGMENT', 'offline'),
-				'MenuTitle' => _t('MaintenanceMode.MENUTITLE', 'Utility Page'),
-				'Content' => _t('MaintenanceMode.CONTENT', '<h1>We&rsquo;ll be back soon!</h1>'
-					.'<p>Sorry for the inconvenience but '
-					.'our site is currently down for scheduled maintenance. '
-					.'If you need to you can always <a href="mailto:#">contact us</a>, '
-					.'otherwise we&rsquo;ll be back online shortly!</p>'
-					.'<p>&mdash; The Team</p>'),
-				'ParentID' => 0,
-				'Status' => 'Published'
-			));
-			$page->write();
-			$page->publish('Stage', 'Live');
+			if(!$pageExists) {
+				$page = UtilityPage::create(array(
+					'Title' => _t('MaintenanceMode.TITLE', 'Undergoing Scheduled Maintenance'),
+					'URLSegment' => _t('MaintenanceMode.URLSEGMENT', 'offline'),
+					'MenuTitle' => _t('MaintenanceMode.MENUTITLE', 'Utility Page'),
+					'Content' => _t('MaintenanceMode.CONTENT', '<h1>We&rsquo;ll be back soon!</h1>'
+						. '<p>Sorry for the inconvenience but '
+						. 'our site is currently down for scheduled maintenance. '
+						. 'If you need to you can always <a href="mailto:#">contact us</a>, '
+						. 'otherwise we&rsquo;ll be back online shortly!</p>'
+						. '<p>&mdash; The Team</p>'),
+					'ParentID' => 0,
+					'Status' => 'Published'
+				));
+				$page->write();
+				$page->publish('Stage', 'Live');
+			}
 
-			DB::alteration_message('Utility Page created', 'created');
+			// Ensure a static error page is created from latest Utility Page content
+			$response = Director::test(Director::makeRelative($page->Link()));
+			$written = null;
+			if($fh = fopen($pagePath, 'w')) {
+				$written = fwrite($fh, $response->getBody());
+				fclose($fh);
+			}
+
+			if($written) {
+				DB::alteration_message(
+					sprintf('%s error Utility Page created', $code),
+					'created'
+				);
+			} else {
+				DB::alteration_message(
+					sprintf(
+						'%s error Utility page could not be created at %s. Please check permissions',
+						$code,
+						$pagePath
+					),
+					'error'
+				);
+			}
+
 		}
 	}
 
