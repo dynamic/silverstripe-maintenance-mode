@@ -132,14 +132,13 @@ class UtilityPage extends ErrorPage {
 	 */
 	public static function get_top_level_templates() {
 
-		$ss_templates_array = array(); //initialise empty array
+		$ss_templates_array = array();
 		$current_theme_path = THEMES_PATH . '/' . Config::inst()->get('SSViewer', 'theme');
 
 		//theme directories to search
 		$search_dir_array = array(
 			MAINTENANCE_MODE_PATH .'/templates',
 			$current_theme_path   .'/templates'
-			//$current_theme_path   .'/templates/Layout' //we only want top level templates
 		);
 
 		foreach($search_dir_array as $directory) {
@@ -170,12 +169,17 @@ class UtilityPage extends ErrorPage {
  */
 class UtilityPage_Controller extends Page_Controller {
 
-	public $templates; //required for template overrides
+	private static $url_handlers = array(
+		'*' => 'index'
+	);
 
 	private static $allowed_actions = array();
 
 	public function init() {
 		parent::init();
+	}
+
+	public function index() {
 
 		$config = $this->SiteConfig();
 
@@ -184,10 +188,12 @@ class UtilityPage_Controller extends Page_Controller {
 			return $this->redirect(BASE_URL); //redirect to home page
 		}
 
+		$this->response->setStatusCode($this->ErrorCode);
+
 		if($this->dataRecord->RenderingTemplate) {
-			$this->templates['index'] = array($this->dataRecord->RenderingTemplate, 'Page');
+			return $this->renderWith(array($this->dataRecord->RenderingTemplate, 'Page'));
 		}
 
-		$this->response->setStatusCode($this->ErrorCode);
+		return array();
 	}
 }
