@@ -46,7 +46,7 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 		// Are we configured to prevent redirection to the UtilityPage URL?
 		if ($utilityPage->config()->DisableRedirect) {
 
-			// Process the request internally to ensure that the URL is maintained 
+			// Process the request internally to ensure that the URL is maintained
 			// (instead of redirecting to the maintenance page's URL) and skip any further processing.
 
 			$controller = ModelAsController::controller_for($utilityPage);
