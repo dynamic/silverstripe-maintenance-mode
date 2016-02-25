@@ -5,11 +5,13 @@
  * to redirect regular non-admin users to the Utility
  * Page if maintenance mode is switched on.
  *
+ * @package maintenancemode
+ *
  * @author Darren-Lee Joseph <darrenleejoseph@gmail.com>
  * @author Patrick Nelson <pat@catchyour.com>
- * @package maintenancemode
  */
-class MaintenanceMode_Page_ControllerExtension extends Extension {
+class MaintenanceMode_Page_ControllerExtension extends Extension
+{
 
 	/**
 	 * Allowed IP addresses
@@ -21,27 +23,35 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 	/**
 	 * @return SS_HTTPResponse
 	 */
-	public function onBeforeInit() {
+	public function onBeforeInit()
+	{
 
 		$config = SiteConfig::current_site_config();
 
 		// If Maintenance Mode is Off, skip processing
-		if(!$config->MaintenanceMode) return;
-
+		if (!$config->MaintenanceMode) {
+			return;
+		}
 
 		// Check if the visitor is Admin OR if they have an allowed IP.
-		if(Permission::check("ADMIN") || $this->hasAllowedIP()) return;
-
+		if (Permission::check('VIEW_SITE_MAINTENANCE_MODE') || Permission::check('ADMIN') || $this->hasAllowedIP()) {
+			return;
+		}
 
 		// Are we already on the UtilityPage? If so, skip processing.
-		if ($this->owner instanceof UtilityPage_Controller) return;
-
+		if ($this->owner instanceof UtilityPage_Controller) {
+			return;
+		}
 
 		// Fetch our utility page instance now.
-		/** @var Page $utilityPage */
+		/**
+		 * @var Page $utilityPage
+		 */
 		$utilityPage = UtilityPage::get()->first();
-		if (!$utilityPage) return; // We need a utility page before we can do anything.
-
+		if (!$utilityPage) {
+			return;
+		}
+		// We need a utility page before we can do anything.
 
 		// Are we configured to prevent redirection to the UtilityPage URL?
 		if ($utilityPage->config()->DisableRedirect) {
@@ -58,7 +68,6 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 			die();
 		}
 
-
 		// Default: Skip any further processing and immediately respond with a redirect to the UtilityPage.
 		$response = new SS_HTTPResponse();
 		$response->redirect($utilityPage->AbsoluteLink(), 302);
@@ -74,7 +83,8 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 	 *
 	 * @return boolean
 	 */
-	public function hasAllowedIP() {
+	public function hasAllowedIP()
+	{
 		return in_array($this->getClientIP(), $this->owner->config()->allowed_ips);
 	}
 
@@ -83,20 +93,22 @@ class MaintenanceMode_Page_ControllerExtension extends Extension {
 	 *
 	 * @return string
 	 */
-	public function getClientIP() {
+	public function getClientIP()
+	{
 		return $this->owner->getRequest()->getIP();
 	}
 
-}//end class MaintenanceMode_Page_ControllerExtension
-
+} //end class MaintenanceMode_Page_ControllerExtension
 
 /**
  * Add settings fields to SiteConfig to control maintenance mode
  *
- * @author Darren-Lee Joseph <darrenleejoseph@gmail.com>
  * @package maintenancemode
+ *
+ * @author Darren-Lee Joseph <darrenleejoseph@gmail.com>
  */
-class MaintenanceMode_SiteConfigExtension extends DataExtension {
+class MaintenanceMode_SiteConfigExtension extends DataExtension
+{
 
 	/**
 	 * Add database field for flag to either display or hide under construction pages.
@@ -108,12 +120,13 @@ class MaintenanceMode_SiteConfigExtension extends DataExtension {
 	);
 
 	/**
-	 * @param  FieldList $fields
+	 * @param FieldList $fields
 	 */
-	public function updateCMSFields(FieldList $fields) {
+	public function updateCMSFields(FieldList $fields)
+	{
 
 		//create new tabs in SiteConfig
-		$fields->addFieldToTab("Root.Access",
+		$fields->addFieldToTab('Root.Access',
 			FieldGroup::create(
 				HeaderField::create(
 					'MaintenanceModeHeading',
@@ -122,9 +135,9 @@ class MaintenanceMode_SiteConfigExtension extends DataExtension {
 				),
 				CheckboxField::create(
 					'MaintenanceMode',
-					'&nbsp; ' . _t('MaintenanceMode.SETTINGSACTIVATE', 'Activate Offline/Maintenance Mode')
+					'&nbsp; '._t('MaintenanceMode.SETTINGSACTIVATE', 'Activate Offline/Maintenance Mode')
 				)
 			)
 		);
-	}//end updateCMSFields
-}//end class MaintenanceMode_SiteConfigExtension
+	} //end updateCMSFields
+} //end class MaintenanceMode_SiteConfigExtension
