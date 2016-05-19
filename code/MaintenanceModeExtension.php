@@ -127,8 +127,13 @@ class MaintenanceMode_SiteConfigExtension extends DataExtension
 		//create new tabs in SiteConfig
 		$fields->addFieldToTab('Root.Access',
 		    FieldGroup::create(
-			    new CheckboxField('MaintenanceMode', _t('MaintenanceMode.SETTINGSACTIVATE', 'Activate Offline/Maintenance Mode'))
-		    )->setTitle(_t('MaintenanceMode.SETTINGSHEADING', 'Offline/Maintenance Mode'))
+			    new CheckboxField(
+			        'MaintenanceMode',
+			        _t('MaintenanceMode.SETTINGSACTIVATE', 'Activate Offline/Maintenance Mode')
+		        )
+		    )->setTitle(
+		        _t('MaintenanceMode.SETTINGSHEADING', 'Offline/Maintenance Mode')
+	        )
 	    );
 	} //end updateCMSFields
 } //end class MaintenanceMode_SiteConfigExtension
