@@ -64,7 +64,7 @@ class UtilityPage extends ErrorPage
 		$pageExists = ($page && $page->exists());
 
 		//Only create a UtilityPage on dev/build if one does not already exist.
-		if (!$pageExists or !file_exists($pagePath)) {
+		if (!$pageExists || !file_exists($pagePath)) {
 
 			if (!$pageExists) {
 				$page = UtilityPage::create(array(
