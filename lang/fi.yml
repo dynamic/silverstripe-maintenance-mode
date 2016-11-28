@@ -1,0 +1,10 @@
+fi:
+  MaintenanceMode:
+    SETTINGSHEADING: 'Offline/Huolto -tila'
+    SETTINGSACTIVATE: 'Aktivoi Offline/Huolto -tila'
+    TITLE: 'Sivustoa päivitetään'
+    URLSEGMENT: 'offline'
+    MENUTITLE: 'Sivustoa päivitetään'
+    CONTENT: '<h1>Palaamme pian!</h1><p>Pahoittelemme häiriötä, mutta sivustoa päivitetään juuri tällä hetkellä ja sivustolle pääsy on estetty päivitysten vuoksi.</p>'
+    RENDERINGTEMPLATE: 'Käytä ulkoasua'
+    DEFAULTTEMPLATE: '(Oletusulkoasu)'
