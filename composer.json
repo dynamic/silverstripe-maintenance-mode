@@ -21,7 +21,7 @@
         "silverstripe/framework": "^4.0@dev"
     },
     "extra": {
-        "installer-name": "maintenance-mode"
+        "installer-name": "maintenance-mode",
         "branch-alias": {
             "dev-master": "2.0.x-dev"
         }
