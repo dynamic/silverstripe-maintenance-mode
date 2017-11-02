@@ -17,10 +17,13 @@
         "issues": "http://github.com/dljoseph/silverstripe-maintenance-mode/issues"
     },
     "require": {
-        "silverstripe/cms": "~3.1",
-        "silverstripe/framework": "~3.1"
+        "silverstripe/cms": "^4.0@dev",
+        "silverstripe/framework": "^4.0@dev"
     },
     "extra": {
         "installer-name": "maintenance-mode"
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
     }
 }
