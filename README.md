@@ -13,7 +13,9 @@ Maintainer Contacts
 Requirements
 ------------
 
-* SilverStripe 3.1
+This branch will aim for compatibility with SilverStripe 4.x.
+
+For SilverStripe 3.x, please see the [compatible branch](https://github.com/dljoseph/silverstripe-maintenance-mode/tree/1.0).
 
 
 Installation Instructions
