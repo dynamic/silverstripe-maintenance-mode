@@ -12,6 +12,12 @@
  * @since 2015-10-08
  */
 
+namespace dljoseph\MaintenanceMode;
+
+use SilverStripe\Control\Director;
+use SilverStripe\Dev\BuildTask;
+use SilverStripe\SiteConfig\SiteConfig;
+
 class MaintenanceMode extends BuildTask
 {
 	protected $title = 'Maintance Mode Task';
@@ -19,7 +25,7 @@ class MaintenanceMode extends BuildTask
 	protected $enabled = true;
 
 	/**
-	 * @param	SS_HTTPRequest $request
+	 * @param	\SilverStripe\Control\HTTPRequest $request
 	 */
 	public function run($request)
 	{
@@ -33,12 +39,12 @@ class MaintenanceMode extends BuildTask
 			// Get and validate desired maintenance mode setting.
 			$get = $request->getVars();
 			if (empty($get['args'])) {
-				throw new Exception("Please provide an argument (e.g. 'on' or 'off').", 1);
+				throw new \Exception("Please provide an argument (e.g. 'on' or 'off').", 1);
 			}
 
 			$arg = strtolower(current($get['args']));
 			if ($arg != 'on' && $arg != 'off') {
-				throw new Exception("Invalid argument: '$arg' (expected 'on' or 'off')", 2);
+				throw new \Exception("Invalid argument: '$arg' (expected 'on' or 'off')", 2);
 			}
 
 			// Get and write site configuration now.
@@ -54,7 +60,7 @@ class MaintenanceMode extends BuildTask
 				$this->output("NOTE: Maintenance mode was already '$arg' (nothing has changed).");
 			}
 
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$this->output('ERROR: '.$e->getMessage());
 			if ($e->getCode() <= 2) {
 				$this->output('Usage: sake dev/tasks/MaintenanceMode [on|off]');

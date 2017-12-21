@@ -1,17 +1,17 @@
 ---
 Name: maintenancemode
 After:
-- 'framework/*'
-- 'cms/*'
+- '#rootroutes'
+- '#coreroutes'
 ---
 # YAML configuration for SilverStripe
 # See http://doc.silverstripe.org/framework/en/topics/configuration
 # Caution: Indentation through two spaces, not tabs
 
-SiteConfig:
+SilverStripe\SiteConfig\SiteConfig:
   extensions:
-    - MaintenanceMode_SiteConfigExtension
+    - dljoseph\MaintenanceMode\SiteConfigExtension
 
 Page_Controller:
   extensions:
-    - MaintenanceMode_Page_ControllerExtension
+    - dljoseph\MaintenanceMode\PageControllerExtension

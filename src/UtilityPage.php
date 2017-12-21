@@ -1,5 +1,14 @@
 <?php
 
+namespace dljoseph\MaintenanceMode;
+
+use SilverStripe\Core\Config\Config;
+use SilverStripe\ErrorPage\ErrorPage;
+use SilverStripe\Forms\DropdownField;
+use SilverStripe\ORM\DB;
+use SilverStripe\Security\Member;
+use SilverStripe\Versioned\Versioned;
+
 /**
  * Utility Page which can be used as a Down for Maintenance,
  * Under Construction or Coming Soon Page
@@ -15,6 +24,8 @@ class UtilityPage extends ErrorPage
 	private static $plural_name = 'Utility Pages';
 	private static $description = 'Use this to create a Down for Maintenance, Under Construction or Coming Soon Page';
 	private static $icon = 'maintenance-mode/images/tools-icon.png';
+
+	private static $table_name = 'UtilityPage';
 
 	private static $db = array(
 		'RenderingTemplate' => 'Varchar(64)'
@@ -32,7 +43,7 @@ class UtilityPage extends ErrorPage
 	 * @param  Member    $member
 	 * @return boolean
 	 */
-	public function canCreate($member = null)
+	public function canCreate($member = null, $context = null)
 	{
 		// Only allow one of this Page type to be created in the CMS.
 		return !UtilityPage::get()->exists();
@@ -59,14 +70,16 @@ class UtilityPage extends ErrorPage
 		}
 
 		$code = self::$defaults['ErrorCode'];
-		$pagePath = self::get_filepath_for_errorcode($code);
-		$page = UtilityPage::get()->first();
-		$pageExists = ($page && $page->exists());
 
-		//Only create a UtilityPage on dev/build if one does not already exist.
-		if (!$pageExists || !file_exists($pagePath)) {
+        $page = UtilityPage::get()->filter('ErrorCode', $code)->first();
+        $pageExists = !empty($page);
+        if (!$pageExists) {
 
-			if (!$pageExists) {
+            $page = UtilityPage::get()->first();
+		    $pageExists = ($page && $page->exists());
+
+            //Only create a UtilityPage on dev/build if one does not already exist.
+
 				$page = UtilityPage::create(array(
 					'Title'      => _t('MaintenanceMode.TITLE', 'Undergoing Scheduled Maintenance'),
 					'URLSegment' => _t('MaintenanceMode.URLSEGMENT', 'offline'),
@@ -77,38 +90,42 @@ class UtilityPage extends ErrorPage
 .'If you need to you can always <a href="mailto:#">contact us</a>, '
 .'otherwise we&rsquo;ll be back online shortly!</p>'
 .'<p>&mdash; The Team</p>'),
-					'ParentID'   => 0,
-					'Status'     => 'Published'
+					'ParentID'   => 0
 				));
 				$page->write();
-				$page->publish('Stage', 'Live');
-			}
+                $page->copyVersionToStage(Versioned::DRAFT, Versioned::LIVE);
 
-			// Ensure a static error page is created from latest Utility Page content
-			$response = Director::test(Director::makeRelative($page->Link()));
-			$written = null;
-			if ($fh = fopen($pagePath, 'w')) {
-				$written = fwrite($fh, $response->getBody());
-				fclose($fh);
-			}
+        }
 
-			if ($written) {
-				DB::alteration_message(
-					sprintf('%s error Utility Page created', $code),
-					'created'
-				);
-			} else {
-				DB::alteration_message(
-					sprintf(
-						'%s error Utility page could not be created at %s. Please check permissions',
-						$code,
-						$pagePath
-					),
-					'error'
-				);
-			}
+        // Ensure a static error page is created from latest Utility Page content
 
-		}
+        // Check if static files are enabled
+        if (!self::config()->enable_static_file) {
+            return;
+        }
+
+        // Ensure this page has cached error content
+        $success = true;
+        if (!$page->hasStaticPage()) {
+            // Update static content
+            $success = $page->writeStaticPage();
+        } elseif ($pageExists) {
+            // If page exists and already has content, no alteration_message is displayed
+            return;
+        }
+
+        if ($success) {
+            DB::alteration_message(
+                sprintf('%s error Utility Page created', $code),
+                'created'
+            );
+        } else {
+            DB::alteration_message(
+                sprintf('%s error Utility page could not be created. Please check permissions', $code),
+                'error'
+            );
+        }
+
 	}
 
 	/**
@@ -167,55 +184,4 @@ class UtilityPage extends ErrorPage
 		return $ss_templates_array;
 
 	} //end get_top_level_templates()
-}
-
-/**
- * Displays a utility page to users who are not logged in as admin
- *
- * @package maintenancemode
- *
- * @author Darren-Lee Joseph <darrenleejoseph@gmail.com>
- */
-class UtilityPage_Controller extends Page_Controller implements PermissionProvider
-{
-
-	private static $url_handlers = array(
-		'*' => 'index'
-	);
-
-	private static $allowed_actions = array();
-
-	public function init()
-	{
-		parent::init();
-	}
-
-	/**
-	 * @return mixed
-	 */
-	public function index()
-	{
-
-		$config = $this->SiteConfig();
-
-		//regular non-admin users should only be able to see this utility page in maintenance mode
-		if (!$config->MaintenanceMode && !Permission::check('ADMIN')) {
-			return $this->redirect(BASE_URL); //redirect to home page
-		}
-
-		$this->response->setStatusCode($this->ErrorCode);
-
-		if ($this->dataRecord->RenderingTemplate) {
-			return $this->renderWith(array($this->dataRecord->RenderingTemplate, 'Page'));
-		}
-
-		return array();
-	}
-
-	public function providePermissions()
-	{
-		return array(
-			'VIEW_SITE_MAINTENANCE_MODE' => 'Access the site in Maintenance Mode'
-		);
-	}
 }
