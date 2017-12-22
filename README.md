@@ -25,11 +25,11 @@ Installation can be done either by composer or by manually downloading a release
 
 ### Via composer
 
-`composer require "thisisbd/silverstripe-maintenance-mode:*"`
+`composer require "dljoseph/silverstripe-maintenance-mode:*"`
 
 ### Manually
 
- 1.  Download the module from [the releases page](https://github.com/thisisbd/silverstripe-maintenance-mode/releases).
+ 1.  Download the module from [the releases page](https://github.com/dljoseph/silverstripe-maintenance-mode/releases).
  2.  Extract the file (if you are on windows try 7-zip for extracting tar.gz files
  3.  Make sure the folder after being extracted is named 'maintenance-mode'
  4.  Place this directory in your sites root directory. This is the one with framework and cms in it.
