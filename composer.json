@@ -17,13 +17,18 @@
         "issues": "http://github.com/dljoseph/silverstripe-maintenance-mode/issues"
     },
     "require": {
-        "silverstripe/cms": "^4.0@dev",
-        "silverstripe/framework": "^4.0@dev"
+        "silverstripe/vendor-plugin": "^1.0",
+        "silverstripe/cms": "~4.0",
+    },
+    "autoload": {
+        "psr-4": {
+            "dljoseph\\MaintenanceMode\\": "src/"
+        }
     },
     "extra": {
-        "installer-name": "maintenance-mode",
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
-    }
+        "expose": [
+            "client"
+        ]
+    },
+    "minimum-stability": "dev"
 }
