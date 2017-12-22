@@ -2,7 +2,7 @@
 Name: maintenancemode
 After:
 - '#rootroutes'
-- '#coreroutes'
+- 'framework/routes#coreroutes'
 ---
 # YAML configuration for SilverStripe
 # See http://doc.silverstripe.org/framework/en/topics/configuration
