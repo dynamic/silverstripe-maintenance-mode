@@ -57,7 +57,7 @@ class PageControllerExtension extends Extension
 
 
         //Is visitor trying to hit the admin URL?  Give them a chance to log in.
-        if(strstr("/Security/login", $this->owner->RelativeLink())) {
+        if(strpos($this->owner->RelativeLink(), 'Security') !== false) {
             return;
         }
 
