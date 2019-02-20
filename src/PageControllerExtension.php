@@ -19,6 +19,7 @@ use SilverStripe\Control\HTTPRequest;
 use SilverStripe\Control\HTTPResponse;
 use SilverStripe\Core\Extension;
 use SilverStripe\Security\Permission;
+use SilverStripe\Security\Security;
 use SilverStripe\SiteConfig\SiteConfig;
 
 class PageControllerExtension extends Extension
@@ -32,11 +33,10 @@ class PageControllerExtension extends Extension
     private static $allowed_ips = array();
 
     /**
-     * @return HTTPResponse
+     * @throws \SilverStripe\Control\HTTPResponse_Exception
      */
     public function onBeforeInit()
     {
-
         $config = SiteConfig::current_site_config();
 
         // If Maintenance Mode is Off, skip processing
@@ -57,14 +57,18 @@ class PageControllerExtension extends Extension
 
 
         //Is visitor trying to hit the admin URL?  Give them a chance to log in.
-        if(strstr("/Security/login", $this->owner->RelativeLink())) {
+        /** @var HTTPRequest $request */
+        $request = $this->owner->getRequest();
+        $loginURL = preg_quote(Security::config()->get('login_url'), '/');
+
+        if(preg_match("/{$loginURL}/", $request->getURL())) {
             return;
         }
 
 
         // Fetch our utility page instance now.
         /**
-         * @var Page $utilityPage
+         * @var \Page $utilityPage
          */
         $utilityPage = UtilityPage::get()->first();
         if (!$utilityPage) {
