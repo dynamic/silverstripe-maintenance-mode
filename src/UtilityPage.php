@@ -23,7 +23,7 @@ class UtilityPage extends ErrorPage
 	private static $singular_name = 'Utility Page';
 	private static $plural_name = 'Utility Pages';
 	private static $description = 'Use this to create a Down for Maintenance, Under Construction or Coming Soon Page';
-	private static $icon = 'dljoseph/MaintenanceMode:client/images/tools-icon.png';
+	private static $icon = 'dljoseph/silverstripe-maintenance-mode:client/images/tools-icon.png';
 
 	private static $table_name = 'UtilityPage';
 
