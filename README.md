@@ -8,14 +8,14 @@ make changes to the site.
 
 Maintainer Contacts
 -------------------
-*  DL Joseph (Nickname: dljoseph) `<darrenleejoseph (at) gmail (dot) com>`
+*  Dynamic `<dev (at) dynamicagency (dot) com>`
 
 Requirements
 ------------
 
 This branch will aim for compatibility with SilverStripe 4.x.
 
-For SilverStripe 3.x, please see the [compatible branch](https://github.com/dljoseph/silverstripe-maintenance-mode/tree/1.0).
+For SilverStripe 3.x, please see the [compatible branch](https://github.com/dynamic/silverstripe-maintenance-mode/tree/1.0).
 
 
 Installation Instructions
@@ -29,7 +29,7 @@ Installation can be done either by composer or by manually downloading a release
 
 ### Manually
 
- 1.  Download the module from [the releases page](https://github.com/dljoseph/silverstripe-maintenance-mode/releases).
+ 1.  Download the module from [the releases page](https://github.com/dynamic/silverstripe-maintenance-mode/releases).
  2.  Extract the file (if you are on windows try 7-zip for extracting tar.gz files
  3.  Make sure the folder after being extracted is named 'maintenance-mode'
  4.  Place this directory in your sites root directory. This is the one with framework and cms in it.
@@ -91,7 +91,3 @@ Page_Controller:
     - '127.0.0.1'
     - '::1'
 ```
-
-Known Issues
-------------
-There are no known issues.
