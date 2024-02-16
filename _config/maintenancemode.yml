@@ -12,6 +12,6 @@ SilverStripe\SiteConfig\SiteConfig:
   extensions:
     - dljoseph\MaintenanceMode\SiteConfigExtension
 
-Page_Controller:
+PageController:
   extensions:
     - dljoseph\MaintenanceMode\PageControllerExtension
